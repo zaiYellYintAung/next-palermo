@@ -1,0 +1,19 @@
+{
+  "common": {},
+  "home": {
+    "title": "Välkommen din rackare"
+  },
+  "aboutUs": {},
+  "contactUs": {},
+  "components": {
+    "pageHeader": {
+      "defaultTitle": "Wälkommen din räcker",
+      "defaultDescription": "Discover more about us"
+    },
+    "localeSwitcher": {
+      "switchLabel": "Välj språk",
+      "english": "English",
+      "swedish": "Svenska"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "common": {},
+  "home": {
+    "title": "Welcome to Our Site"
+  },
+  "aboutUs": {},
+  "contactUs": {},
+  "components": {
+    "pageHeader": {
+      "defaultTitle": "Welcome to Our Site",
+      "defaultDescription": "Discover more about us"
+    },
+    "localeSwitcher": {
+      "switchLabel": "Choose Language",
+      "english": "English",
+      "swedish": "Svenska"
+    }
+  }
+}
