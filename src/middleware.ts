@@ -13,12 +13,18 @@ function getLocale(request: NextRequest): string | undefined {
 
   // @ts-ignore locales are readonly
   const locales: string[] = i18n.locales;
+  console.log('locales:', locales);
 
   return matchLocale(languages, locales, i18n.defaultLocale);
 }
 
+// export function middleware(request: NextRequest) {
+//   const preferredLocale = getLocale(request);
+//   console.log('preferredLocale:', preferredLocale);
+// }
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
+  console.log('pathname', pathname);
 
   if (
     [
@@ -39,7 +45,7 @@ export function middleware(request: NextRequest) {
   )
     return;
 
-  const preferredLocale = getLocale(request) || i18n.defaultLocale;
+  //
 
   if (
     pathname.startsWith(`/${i18n.defaultLocale}/`) ||
@@ -54,7 +60,6 @@ export function middleware(request: NextRequest) {
     );
 
     newUrl.search = searchParams.toString();
-    console.log('newUrl', newUrl);
 
     return NextResponse.redirect(newUrl, { status: 301 });
   }
@@ -64,7 +69,22 @@ export function middleware(request: NextRequest) {
   );
 
   if (pathnameIsMissingLocale) {
-    const newUrl = new URL(`/${preferredLocale}`, request.url);
+    console.log('pathnameIsMissingLocale:', pathnameIsMissingLocale);
+
+    const newUrl = new URL(`/${i18n.defaultLocale}${pathname}`, request.url);
+
+    newUrl.search = searchParams.toString();
+
+    return NextResponse.rewrite(newUrl);
+  }
+
+  const locale = getLocale(request);
+
+  if (typeof locale === 'string' && locale) {
+    console.log('locale:', locale);
+
+    const newUrl = new URL(`/${locale}`, request.url);
+
     newUrl.search = searchParams.toString();
 
     return NextResponse.rewrite(newUrl);

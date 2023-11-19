@@ -9,10 +9,11 @@ const dictionaries = {
 };
 
 /**
- * Retrieves a dictionary based on the specified locale.
- * If the specified locale is not found, the Swedish dictionary is returned.
- * @param locale - The locale to retrieve the dictionary for.
- * @returns The dictionary for the specified locale, or the Swedish dictionary if the specified locale is not found.
+ * Retrieves the dictionary based on the specified locale.
+ * If the locale is not found, it falls back to the Swedish dictionary.
+ *
+ * @param locale The locale for which to retrieve the dictionary.
+ * @returns The dictionary object.
  */
 export const getDictionary = async (locale: Locale) =>
-  dictionaries[locale]?.() ?? dictionaries.en();
+  dictionaries[locale]?.() ?? dictionaries.sv();

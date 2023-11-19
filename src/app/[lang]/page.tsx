@@ -7,6 +7,8 @@ export default async function Home({
 }: {
   params: { lang: Locale };
 }) {
+  // console.log('[page component] lang:', lang);
+
   const dictionary = await getDictionary(lang);
   return (
     <>

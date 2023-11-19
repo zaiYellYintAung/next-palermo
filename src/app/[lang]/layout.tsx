@@ -9,11 +9,11 @@ const inter = Inter({ subsets: ['latin'] });
  * Generates an array of static parameters for each locale in the i18n configuration.
  * @returns An array of objects with a `lang` property representing each locale.
  */
-export async function generateStaticParams() {
-  return i18n.locales.map(locale => ({
-    lang: locale,
-  }));
-}
+// export async function generateStaticParams() {
+//   return i18n.locales.map(locale => ({
+//     lang: locale,
+//   }));
+// }
 
 export default function RootLayout({
   children,
@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { lang: Locale };
 }) {
-  // console.log('[layout component]', params);
+  console.log('[layout component] params:', params);
 
   return (
     <html lang={params.lang}>
