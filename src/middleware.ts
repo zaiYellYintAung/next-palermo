@@ -12,16 +12,11 @@ function getLocale(request: NextRequest): string | undefined {
   let languages = new Negotiator({ headers: negotiatorHeaders }).languages();
 
   // @ts-ignore locales are readonly
-  const locales: string[] = i18n.locales;
-  console.log('locales:', locales);
+  const locales: string[] = i18n.languages.map(lang => lang.id);
 
-  return matchLocale(languages, locales, i18n.defaultLocale);
+  return matchLocale(languages, locales, i18n.base || 'id');
 }
 
-// export function middleware(request: NextRequest) {
-//   const preferredLocale = getLocale(request);
-//   console.log('preferredLocale:', preferredLocale);
-// }
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
   console.log('pathname', pathname);
@@ -45,16 +40,11 @@ export function middleware(request: NextRequest) {
   )
     return;
 
-  //
-
-  if (
-    pathname.startsWith(`/${i18n.defaultLocale}/`) ||
-    pathname === `/${i18n.defaultLocale}`
-  ) {
+  if (pathname.startsWith(`/${i18n.base}/`) || pathname === `/${i18n.base}`) {
     const newUrl = new URL(
       pathname.replace(
-        `/${i18n.defaultLocale}`,
-        pathname === `/${i18n.defaultLocale}` ? '/' : ''
+        `/${i18n.base}`,
+        pathname === `/${i18n.base}` ? '/' : ''
       ),
       request.url
     );
@@ -64,27 +54,15 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(newUrl, { status: 301 });
   }
 
-  const pathnameIsMissingLocale = i18n.locales.every(
-    locale => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+  const pathnameIsMissingLocale = i18n.languages.every(
+    locale =>
+      !pathname.startsWith(`/${locale.id}/`) && pathname !== `/${locale.id}`
   );
-
-  if (pathnameIsMissingLocale) {
-    console.log('pathnameIsMissingLocale:', pathnameIsMissingLocale);
-
-    const newUrl = new URL(`/${i18n.defaultLocale}${pathname}`, request.url);
-
-    newUrl.search = searchParams.toString();
-
-    return NextResponse.rewrite(newUrl);
-  }
 
   const locale = getLocale(request);
 
-  if (typeof locale === 'string' && locale) {
-    console.log('locale:', locale);
-
+  if (pathnameIsMissingLocale) {
     const newUrl = new URL(`/${locale}`, request.url);
-
     newUrl.search = searchParams.toString();
 
     return NextResponse.rewrite(newUrl);
@@ -100,3 +78,5 @@ export const config = {
 // https://carlogino.com/blog/nextjs13-i18n
 
 // https://www.adamrichardson.dev/blog/localisation-i18n-nextjs-appdir-13
+
+// https://denami.org/en/articles/web-development/internationalization-with-next-js-and-sanity-io
