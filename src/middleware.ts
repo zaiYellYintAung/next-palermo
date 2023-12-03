@@ -19,7 +19,6 @@ function getLocale(request: NextRequest): string | undefined {
 
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
-  console.log('pathname', pathname);
 
   if (
     [
@@ -40,6 +39,8 @@ export function middleware(request: NextRequest) {
   )
     return;
 
+  console.log('pathname', pathname);
+
   if (pathname.startsWith(`/${i18n.base}/`) || pathname === `/${i18n.base}`) {
     const newUrl = new URL(
       pathname.replace(
@@ -58,11 +59,15 @@ export function middleware(request: NextRequest) {
     locale =>
       !pathname.startsWith(`/${locale.id}/`) && pathname !== `/${locale.id}`
   );
+  const langueges = i18n.languages.every(locale => locale.id !== 'id');
+  console.log('pathnameIsMissingLocale', pathnameIsMissingLocale);
 
   const locale = getLocale(request);
 
   if (pathnameIsMissingLocale) {
-    const newUrl = new URL(`/${locale}`, request.url);
+    const newUrl = new URL(`${locale}${pathname}`, request.url);
+    console.log('newUrl', newUrl.toString());
+
     newUrl.search = searchParams.toString();
 
     return NextResponse.rewrite(newUrl);
